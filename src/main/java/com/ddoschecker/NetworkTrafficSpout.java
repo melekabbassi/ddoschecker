@@ -11,6 +11,7 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.Packet;
+import org.pcap4j.core.BpfProgram;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -63,9 +64,10 @@ public class NetworkTrafficSpout extends BaseRichSpout {
         this.collector = collector;
         try {
             // Open the pcap handle for the network interface
-            PcapNetworkInterface nif = Pcaps.getDevByName("eth0");
+            PcapNetworkInterface nif = Pcaps.getDevByName("lo");
             handle = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
-        } catch (PcapNativeException e) {
+            handle.setFilter("port 8083", BpfProgram.BpfCompileMode.OPTIMIZE);
+        } catch (PcapNativeException | NotOpenException e) {
             e.printStackTrace();
         }
     }
