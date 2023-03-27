@@ -67,6 +67,7 @@ public class NetworkTrafficSpout extends BaseRichSpout {
             PcapNetworkInterface nif = Pcaps.getDevByName("lo");
             handle = nif.openLive(65536, PromiscuousMode.PROMISCUOUS, 10);
             handle.setFilter("port 8083", BpfProgram.BpfCompileMode.OPTIMIZE);
+            //handle.setFilter("portrange 1-65535", BpfProgram.BpfCompileMode.OPTIMIZE);
         } catch (PcapNativeException | NotOpenException e) {
             e.printStackTrace();
         }
