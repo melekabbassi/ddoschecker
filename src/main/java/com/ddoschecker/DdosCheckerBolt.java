@@ -94,6 +94,7 @@ public class DdosCheckerBolt extends BaseRichBolt {
                 System.out.println("DDoS attack detected from " + ip + " at " + timeStamp);
             }
         }
+        collector.ack(tuple);
     }
 
     @Override
